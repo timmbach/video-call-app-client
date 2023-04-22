@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useParams } from "react-router";
 import io from "socket.io-client";
 
 function Room() {
@@ -8,6 +9,9 @@ function Room() {
   const socketRef = useRef();
   const otherUser = useRef();
   const userStream = useRef();
+
+  const { roomId } = useParams();
+  console.log(roomId);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -19,10 +23,11 @@ function Room() {
         socketRef.current = io.connect("/");
         socketRef.current.emit(
           "join room",
-          {
-            room: window.location.pathname.split("/")[2],
-          }
+          // {
+          // room: window.location.pathname.split("/")[2]
+          // }
           // props.match.params.roomId
+          roomId
         );
 
         socketRef.current.on("other user", (userId) => {
